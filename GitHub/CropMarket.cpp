@@ -3,6 +3,7 @@
 #include <vector>
 #include <unordered_map>
 #include<fstream>
+#include<sstream>
 
 using namespace std;
 
@@ -117,25 +118,143 @@ class buyer : public login {
         vector<vector<int>> cart;  //{'prdt id or choice', 'quantity', 'amount'}
 
         void disp_list(){
-            // Display list if available prdts; with serial number
-            // ex- 1. wheat
-            //     2. bajra
-            //     3. rajma
-            // 
-
-            cout<<"Enter your choice ( -1. EXIT     0. Visit Cart )  :  ";
+            cout<<"Select the desired product :\n1.Wheat\n2.Jowar\n3.Bajra\n4.Maize\n5.Barley\n( 6. EXIT     7. Visit Cart )\n";
+            cout<<"Enter your choice : ";
             cin>>choice;
 
+            string cropname,sellid,grade,quant,r50,r100,r;
+            bool isAvailable=false;
 
-            if(choice==-1){
-                return;
-            }
-            else if(choice==0){
-                disp_cart();
-                disp_list();
-            }
+            ifstream info7("cropinfo.txt");
             
-            //else display details about selected product
+
+
+            switch(choice){
+                case 1:
+                while(getline(info7,sellid,',') && 
+                      getline(info7,cropname,',') && 
+                      getline(info7,grade,',') && 
+                      getline(info7,quant,',') &&
+                      getline(info7,r50,',') &&
+                      getline(info7,r100,',') &&
+                      getline(info7,r)){
+                    if(cropname=="1"){
+                        isAvailable=true;
+                        
+                        cout<<sellid<<"\n"<<"Wheat"<<" "<<"Grade : "<<grade<<"\n"<<
+                        "Quantity available : "<<quant<<"\n"<<"Rate below 50kg : "<<r50<<"\n"<<
+                        "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
+
+                    }
+                }
+
+                break;
+
+                case 2:
+                while(getline(info7,sellid,',') && 
+                      getline(info7,cropname,',') && 
+                      getline(info7,grade,',') && 
+                      getline(info7,quant,',') &&
+                      getline(info7,r50,',') &&
+                      getline(info7,r100,',') &&
+                      getline(info7,r)){
+                    if(cropname=="2"){
+                        isAvailable=true;
+                        if(r=="0"){
+                            r="-";
+                        }
+                        if(r100=="0"){
+                            r100="-";
+                        }
+                        cout<<sellid<<"\n"<<"Wheat"<<" "<<"Grade : "<<grade<<"\n"<<
+                        "Quantity available : "<<quant<<"\n"<<"Rate below 50kg : "<<r50<<"\n"<<
+                        "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
+
+                    }
+                }
+                break;
+
+                case 3:
+                while(getline(info7,sellid,',') && 
+                      getline(info7,cropname,',') && 
+                      getline(info7,grade,',') && 
+                      getline(info7,quant,',') &&
+                      getline(info7,r50,',') &&
+                      getline(info7,r100,',') &&
+                      getline(info7,r)){
+                    if(cropname=="3"){
+                        isAvailable=true;
+                        if(r=="0"){
+                            r="-";
+                        }
+                        if(r100=="0"){
+                            r100="-";
+                        }
+                        cout<<sellid<<"\n"<<"Wheat"<<" "<<"Grade : "<<grade<<"\n"<<
+                        "Quantity available : "<<quant<<"\n"<<"Rate below 50kg : "<<r50<<"\n"<<
+                        "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
+
+                    }
+                }
+                break;
+
+                case 4:
+                while(getline(info7,sellid,',') && 
+                      getline(info7,cropname,',') && 
+                      getline(info7,grade,',') && 
+                      getline(info7,quant,',') &&
+                      getline(info7,r50,',') &&
+                      getline(info7,r100,',') &&
+                      getline(info7,r)){
+                    if(cropname=="4"){
+                        isAvailable=true;
+                        if(r=="0"){
+                            r="-";
+                        }
+                        if(r100=="0"){
+                            r100="-";
+                        }
+                        cout<<sellid<<"\n"<<"Wheat"<<" "<<"Grade : "<<grade<<"\n"<<
+                        "Quantity available : "<<quant<<"\n"<<"Rate below 50kg : "<<r50<<"\n"<<
+                        "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
+
+                    }
+                }
+                break;
+
+                case 5:
+                while(getline(info7,sellid,',') && 
+                      getline(info7,cropname,',') && 
+                      getline(info7,grade,',') && 
+                      getline(info7,quant,',') &&
+                      getline(info7,r50,',') &&
+                      getline(info7,r100,',') &&
+                      getline(info7,r)){
+                    if(cropname=="5"){
+                        isAvailable=true;
+                        if(r=="0"){
+                            r="-";
+                        }
+                        if(r100=="0"){
+                            r100="-";
+                        }
+                        cout<<sellid<<"\n"<<"Wheat"<<" "<<"Grade : "<<grade<<"\n"<<
+                        "Quantity available : "<<quant<<"\n"<<"Rate below 50kg : "<<r50<<"\n"<<
+                        "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
+
+                    }
+                }
+                break;
+
+                case 6:
+                return;
+                break;
+
+                case 7:
+                break;
+            }
+                
+                
 
         }
 
@@ -179,6 +298,10 @@ class buyer : public login {
                 }
                 else if(temp2==3){
                     return;
+                }
+                ofstream info5("cart.txt" , ios::app);
+                for(int i=0;i<cart.size();i++){
+                    info5<<cart[i][1]<<",";
                 }
             }  
             else
@@ -225,6 +348,8 @@ class buyer : public login {
                 cout<<"Your Cart is empty\n";
             else{
                 cout<<"     Product ID      Quantity        Amount\n";
+                // fstream info2("cart.txt");
+                // while(info2,cart[])
                 for (int i=0; i<cart.size(); i++){
                     cout<<(i+1)<<".        "<<cart[i][0]<<"                "<<cart[i][1]<<"          ₹ "<<cart[i][2]<<"\n";
                 
@@ -240,12 +365,17 @@ class buyer : public login {
 
 class sell : public login {
 private:
-    int p, quantity, p50 = 0, p100 = 0, pLast = 0;
+    int p, quantity, p50 = 0, p100 = 0, pLast = 0,sellid=1000;
     char grade;
+    string line;
 
 
 public:
     void product_info() {
+        string id,grade,quant,r50,r100,r,cropname;
+        int sellid=1000;
+        
+        
         cout << "Enter product number: ";
         cin >> p;
 
@@ -270,9 +400,21 @@ public:
             cout << "Enter your price for quantity above 100 kg (in rupees per kg): ";
             cin >> pLast;
         }else{pLast=0;}
-    
+
+        ifstream info8("cropinfo.txt");
+                while(getline(info8,id,',') && 
+                      getline(info8,cropname,',') && 
+                      getline(info8,grade,',') && 
+                      getline(info8,quant,',') &&
+                      getline(info8,r50,',') &&
+                      getline(info8,r100,',') &&
+                      getline(info8,r)){}
+       stringstream ss(id);
+       ss>>sellid;
+            sellid++;
+
     ofstream cinfo("cropinfo.txt", ios::app);
-    cinfo <<p<<","<<grade<<","<<quantity<<","<<p50<<","<<p100<<","<<pLast<<endl;
+    cinfo<<sellid<<","<<p<<","<<grade<<","<<quantity<<","<<p50<<","<<p100<<","<<pLast<<endl;
     }
 
 };
