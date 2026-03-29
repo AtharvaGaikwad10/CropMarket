@@ -116,6 +116,7 @@ class buyer : public login {
         
         int temp2=3, temp1;
         vector<vector<int>> cart;  //{'prdt id or choice', 'quantity', 'amount'}
+        
 
         void disp_list(){
             cout<<"Select the desired product :\n1.Wheat\n2.Jowar\n3.Bajra\n4.Maize\n5.Barley\n( -1. EXIT     0. Visit Cart )\n";
@@ -284,7 +285,6 @@ class buyer : public login {
                             int num3=stoi(r);
                             
                             
-                            
                 if(quantity>100){
                     amount=num3*quantity;   
                 }
@@ -308,19 +308,14 @@ class buyer : public login {
 
                 cout<<"\n1. Add to cart and buy more \n2. Checkout \n3. Discard this item \n";
                 cin>>temp2;
-
-                choice=stoi(cropname);
-                quant=quantity;
-
-                vector<vector<int>> cart;
-                
-                if(temp2==1){
-                    cart.push_back({choice, quantity, amount});
+            
+                    if(temp2==1){
+                    cart.push_back(vector<int>{choice, quantity, amount});
 
                    return;
                 }
                 else if(temp2==2){
-                cart.push_back({choice, quantity, amount});
+                cart.push_back(vector<int>{choice, quantity, amount});
                     return;
                 }
                 else if(temp2==3){
@@ -366,19 +361,19 @@ class buyer : public login {
 
         void disp_cart(){
             int total=0;
-            cout<<"*Your Order Summary*\n";
+            cout<<"\n     *****Your Order Summary*******\n\n";
 
             if(cart.size()==0)
                 cout<<"Your Cart is empty\n";
             else{
-                cout<<"     Product ID      Quantity        Amount\n";
+                cout<<"     Product ID        Quantity        Amount\n";
                 for (int i=0; i<cart.size(); i++){
-                    cout<<(i+1)<<".        "<<cart[i][0]<<"                "<<cart[i][1]<<"          ₹ "<<cart[i][2]<<"\n";
-                
-                    total+=cart[i][2];
+                    cout<<(i+1)<<".       "<<cart[i][0]<<"            "<<cart[i][1]<<"              "<<cart[i][2]<<"\n";
+                    total+=cart[i][2]; 
+                    
 
             }
-            cout<<"Total Amount = "<<total<<"\n";
+            cout<<"\nTotal Amount = "<<total<<"\n\n";
             
             }
         }
