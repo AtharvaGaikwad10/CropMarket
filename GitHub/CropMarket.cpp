@@ -118,7 +118,7 @@ class buyer : public login {
         vector<vector<int>> cart;  //{'prdt id or choice', 'quantity', 'amount'}
 
         void disp_list(){
-            cout<<"Select the desired product :\n1.Wheat\n2.Jowar\n3.Bajra\n4.Maize\n5.Barley\n( 6. EXIT     7. Visit Cart )\n";
+            cout<<"Select the desired product :\n1.Wheat\n2.Jowar\n3.Bajra\n4.Maize\n5.Barley\n( -1. EXIT     0. Visit Cart )\n";
             cout<<"Enter your choice : ";
             cin>>choice;
 
@@ -141,8 +141,8 @@ class buyer : public login {
                     if(cropname=="1"){
                         isAvailable=true;
                         
-                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Wheat"<<"\n"<<"Grade : "<<grade<<"\n"<<
-                        "Quantity available : "<<quant<<"\n"<<"Rate below 50kg : "<<r50<<"\n"<<
+                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Wheat\n"<<"Grade : "<<grade<<"\n"<<
+                        "Quantity available : "<<quant<<" kg\n"<<"Rate below 50kg : "<<r50<<"\n"<<
                         "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
                     }
                 }
@@ -164,8 +164,8 @@ class buyer : public login {
                         if(r100=="0"){
                             r100="-";
                         }
-                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Wheat"<<" "<<"Grade : "<<grade<<"\n"<<
-                        "Quantity available : "<<quant<<"\n"<<"Rate below 50kg : "<<r50<<"\n"<<
+                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Jowar\n"<<"Grade : "<<grade<<"\n"<<
+                        "Quantity available : "<<quant<<" kg\n"<<"Rate below 50kg : "<<r50<<"\n"<<
                         "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
                     }
                 }
@@ -188,8 +188,8 @@ class buyer : public login {
                         if(r100=="0"){
                             r100="-";
                         }
-                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Wheat"<<" "<<"Grade : "<<grade<<"\n"<<
-                        "Quantity available : "<<quant<<"\n"<<"Rate below 50kg : "<<r50<<"\n"<<
+                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Bajra\n"<<"Grade : "<<grade<<"\n"<<
+                        "Quantity available : "<<quant<<" kg\n"<<"Rate below 50kg : "<<r50<<"\n"<<
                         "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
                     }
                 }
@@ -211,8 +211,8 @@ class buyer : public login {
                         if(r100=="0"){
                             r100="-";
                         }
-                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Wheat"<<" "<<"Grade : "<<grade<<"\n"<<
-                        "Quantity available : "<<quant<<"\n"<<"Rate below 50kg : "<<r50<<"\n"<<
+                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Maize\n"<<"Grade : "<<grade<<"\n"<<
+                        "Quantity available : "<<quant<<" kg\n"<<"Rate below 50kg : "<<r50<<"\n"<<
                         "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
                     }
                 }
@@ -234,18 +234,21 @@ class buyer : public login {
                         if(r100=="0"){
                             r100="-";
                         }
-                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Wheat"<<" "<<"Grade : "<<grade<<"\n"<<
-                        "Quantity available : "<<quant<<"\n"<<"Rate below 50kg : "<<r50<<"\n"<<
+                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Barley\n"<<"Grade : "<<grade<<"\n"<<
+                        "Quantity available : "<<quant<<" kg\n"<<"Rate below 50kg : "<<r50<<"\n"<<
                         "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
                     }
                 }
                 break;
 
-                case 6:
+                case -1:
                 return;
                 break;
+                
 
-                case 7:
+                case 0:
+                disp_cart();
+                disp_list();
                 break;
             }
         }
@@ -265,7 +268,8 @@ class buyer : public login {
             
                 cout<<"How much do you wish to buy? : ";
                 cin>>quant;
-
+                int quantity=stoi(quant);
+                
                 ifstream info9("cropinfo.txt");
                 while(getline(info9,id,',') && 
                       getline(info9,cropname,',') && 
@@ -275,32 +279,21 @@ class buyer : public login {
                       getline(info9,r100,',') &&
                       getline(info9,r)){
                         if(prid==id){
-                            int num1=0,num2=0,num3=0;
-                            int quantity;
-                            for(char c:r50){
-                                num1=num1*10+(c-'0');
-                            }
-                            for(char c:r100){
-                                num2=num2*10+(c-'0');
-                            }
-                            for(char c:r){
-                                num3=num3*10+(c-'0');
-                            }
-                            for(char c:quant){
-                                quantity=quantity*10+(c-'0');
-                            }
-
-
-
-
+                            int num1=stoi(r50);
+                            int num2=stoi(r100);
+                            int num3=stoi(r);
+                            
+                            
+                            
                 if(quantity>100){
-                    amount=num1*quantity;    // Temporarily replacing pLast by 1000
+                    amount=num3*quantity;   
                 }
                 else if(quantity>50){
-                    amount=num2*quantity;    // Temporarily replacing p100 by 900
+                    amount=num2*quantity;    
                 }
                 else{
-                    amount=num3*quantity;    // Temporarily replacing p50 by 800
+                    amount=num1*quantity;    
+                
                 }
 
 
@@ -316,21 +309,24 @@ class buyer : public login {
                 cout<<"\n1. Add to cart and buy more \n2. Checkout \n3. Discard this item \n";
                 cin>>temp2;
 
+                choice=stoi(cropname);
+                quant=quantity;
+
+                vector<vector<int>> cart;
+                
                 if(temp2==1){
-                    //cart.push_back({choice, quant, amount});
-                    return;
+                    cart.push_back({choice, quantity, amount});
+
+                   return;
                 }
                 else if(temp2==2){
-                    //cart.push_back({choice, quant, amount});
+                cart.push_back({choice, quantity, amount});
                     return;
                 }
                 else if(temp2==3){
                     return;
                 }
-                ofstream info5("cart.txt" , ios::app);
-                for(int i=0;i<cart.size();i++){
-                    info5<<cart[i][1]<<",";
-                }
+                
               
             //else
                 return;
@@ -376,8 +372,6 @@ class buyer : public login {
                 cout<<"Your Cart is empty\n";
             else{
                 cout<<"     Product ID      Quantity        Amount\n";
-                // fstream info2("cart.txt");
-                // while(info2,cart[])
                 for (int i=0; i<cart.size(); i++){
                     cout<<(i+1)<<".        "<<cart[i][0]<<"                "<<cart[i][1]<<"          ₹ "<<cart[i][2]<<"\n";
                 
@@ -387,7 +381,7 @@ class buyer : public login {
             cout<<"Total Amount = "<<total<<"\n";
             
             }
-        } 
+        }
 };
 
 
@@ -400,53 +394,65 @@ private:
 
 public:
     void product_info() {
-        string id,grad,quant,r50,r100,r,cropname;
-        int sellid=1000;
-        
-        
-        cout << "Enter product number: ";
-        cin >> p;
 
-        cout << "Enter product grade : \n A: High grade \n B: Average grade \n C: Low grade\n";
-        cin >> grade;
+    string id = "999";   
+    string line;
 
-        cout << "Enter quantity you want to sell (in kg): ";
-        cin >> quantity;
-    
+    ifstream info10("cropinfo.txt");
 
     
-        // display price of each range from file system
-        cout << "Enter your price for quantity up to 50 kg (in rupees per kg): ";
-        cin >> p50;
+    while (getline(info10, line)) {
+        if (!line.empty()) {
+            size_t pos = line.find(',');
+            if (pos != string::npos)
+                id = line.substr(0, pos); 
+        }
+    }
+    info10.close();
 
-        if (quantity > 50) {
-            cout << "Enter your price for quantity 50-100 kg (in rupees per kg): ";
-            cin >> p100;
-        }else{p100=0;}
+   
+    int newId = stoi(id) + 1;
+    id = to_string(newId);
 
-        if (quantity > 100) {
-            cout << "Enter your price for quantity above 100 kg (in rupees per kg): ";
-            cin >> pLast;
-        }else{pLast=0;}
+   
+    cout << "Enter product number: ";
+    cin >> p;
 
-        ifstream info8("cropinfo.txt");
-                while(getline(info8,id,',') && 
-                      getline(info8,cropname,',') && 
-                      getline(info8,grad,',') && 
-                      getline(info8,quant,',') &&
-                      getline(info8,r50,',') &&
-                      getline(info8,r100,',') &&
-                      getline(info8,r)){}
+    cout << "Enter product grade:\nA: High\nB: Average\nC: Low\n";
+    cin >> grade;
 
-                      
-       
+    cout << "Enter quantity (kg): ";
+    cin >> quantity;
+
+    cout << "Enter price up to 50kg : ₹";
+    cin >> p50;
+
+    if (quantity > 50) {
+        cout << "Enter price 50-100kg : ₹";
+        cin >> p100;
+    } else p100 = 0;
+
+    if (quantity > 100) {
+        cout << "Enter price above 100kg : ₹";
+        cin >> pLast;
+    } else pLast = 0;
+
 
     ofstream cinfo("cropinfo.txt", ios::app);
-    cinfo<<sellid<<","<<p<<","<<grade<<","<<quantity<<","<<p50<<","<<p100<<","<<pLast<<endl;
-    }
 
+    cinfo << id << ","
+          << p << ","
+          << grade << ","
+          << quantity << ","
+          << p50 << ","
+          << p100 << ","
+          << pLast << endl;
+
+    cinfo.close();
+
+    cout << "\n Product added successfully with ID: " << id << endl;
+}
 };
-
 
 class Crop {
 private:
