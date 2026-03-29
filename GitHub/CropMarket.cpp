@@ -141,13 +141,11 @@ class buyer : public login {
                     if(cropname=="1"){
                         isAvailable=true;
                         
-                        cout<<sellid<<"\n"<<"Wheat"<<" "<<"Grade : "<<grade<<"\n"<<
+                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Wheat"<<"\n"<<"Grade : "<<grade<<"\n"<<
                         "Quantity available : "<<quant<<"\n"<<"Rate below 50kg : "<<r50<<"\n"<<
                         "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
-
                     }
                 }
-
                 break;
 
                 case 2:
@@ -166,12 +164,12 @@ class buyer : public login {
                         if(r100=="0"){
                             r100="-";
                         }
-                        cout<<sellid<<"\n"<<"Wheat"<<" "<<"Grade : "<<grade<<"\n"<<
+                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Wheat"<<" "<<"Grade : "<<grade<<"\n"<<
                         "Quantity available : "<<quant<<"\n"<<"Rate below 50kg : "<<r50<<"\n"<<
                         "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
-
                     }
                 }
+                
                 break;
 
                 case 3:
@@ -190,10 +188,9 @@ class buyer : public login {
                         if(r100=="0"){
                             r100="-";
                         }
-                        cout<<sellid<<"\n"<<"Wheat"<<" "<<"Grade : "<<grade<<"\n"<<
+                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Wheat"<<" "<<"Grade : "<<grade<<"\n"<<
                         "Quantity available : "<<quant<<"\n"<<"Rate below 50kg : "<<r50<<"\n"<<
                         "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
-
                     }
                 }
                 break;
@@ -214,10 +211,9 @@ class buyer : public login {
                         if(r100=="0"){
                             r100="-";
                         }
-                        cout<<sellid<<"\n"<<"Wheat"<<" "<<"Grade : "<<grade<<"\n"<<
+                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Wheat"<<" "<<"Grade : "<<grade<<"\n"<<
                         "Quantity available : "<<quant<<"\n"<<"Rate below 50kg : "<<r50<<"\n"<<
                         "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
-
                     }
                 }
                 break;
@@ -238,10 +234,9 @@ class buyer : public login {
                         if(r100=="0"){
                             r100="-";
                         }
-                        cout<<sellid<<"\n"<<"Wheat"<<" "<<"Grade : "<<grade<<"\n"<<
+                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Wheat"<<" "<<"Grade : "<<grade<<"\n"<<
                         "Quantity available : "<<quant<<"\n"<<"Rate below 50kg : "<<r50<<"\n"<<
                         "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
-
                     }
                 }
                 break;
@@ -253,9 +248,6 @@ class buyer : public login {
                 case 7:
                 break;
             }
-                
-                
-
         }
 
         int getchoice(){        //Getter for choice
@@ -265,23 +257,59 @@ class buyer : public login {
 
 
         void transaction(){
-
-            cout<<"Do you want to buy this product?\n(1. Yes 2. No) : ";
-            cin>>temp1;
+            string prid;
+            string id,grad,quant,r50,r100,r,cropname;
+            cout<<"Enter the Product ID which you wish to buy : ";
+            cin>>prid;
             
-            if(temp1==1){
+            
                 cout<<"How much do you wish to buy? : ";
                 cin>>quant;
 
-                if(quant>100){
-                    amount=1000*quant;    // Temporarily replacing pLast by 1000
+                ifstream info9("cropinfo.txt");
+                while(getline(info9,id,',') && 
+                      getline(info9,cropname,',') && 
+                      getline(info9,grad,',') && 
+                      getline(info9,quant,',') &&
+                      getline(info9,r50,',') &&
+                      getline(info9,r100,',') &&
+                      getline(info9,r)){
+                        if(prid==id){
+                            int num1=0,num2=0,num3=0;
+                            int quantity;
+                            for(char c:r50){
+                                num1=num1*10+(c-'0');
+                            }
+                            for(char c:r100){
+                                num2=num2*10+(c-'0');
+                            }
+                            for(char c:r){
+                                num3=num3*10+(c-'0');
+                            }
+                            for(char c:quant){
+                                quantity=quantity*10+(c-'0');
+                            }
+
+
+
+
+                if(quantity>100){
+                    amount=num1*quantity;    // Temporarily replacing pLast by 1000
                 }
-                else if(quant>50){
-                    amount=900*quant;     // Temporarily replacing p100 by 900
+                else if(quantity>50){
+                    amount=num2*quantity;    // Temporarily replacing p100 by 900
                 }
                 else{
-                    amount=800*quant;      // Temporarily replacing p50 by 800
+                    amount=num3*quantity;    // Temporarily replacing p50 by 800
                 }
+
+
+                        }
+                      }
+
+
+
+                
 
                 cout<<"Total amount = "<<amount;
 
@@ -289,11 +317,11 @@ class buyer : public login {
                 cin>>temp2;
 
                 if(temp2==1){
-                    cart.push_back({choice, quant, amount});
+                    //cart.push_back({choice, quant, amount});
                     return;
                 }
                 else if(temp2==2){
-                    cart.push_back({choice, quant, amount});
+                    //cart.push_back({choice, quant, amount});
                     return;
                 }
                 else if(temp2==3){
@@ -303,8 +331,8 @@ class buyer : public login {
                 for(int i=0;i<cart.size();i++){
                     info5<<cart[i][1]<<",";
                 }
-            }  
-            else
+              
+            //else
                 return;
         }
 
@@ -372,7 +400,7 @@ private:
 
 public:
     void product_info() {
-        string id,grade,quant,r50,r100,r,cropname;
+        string id,grad,quant,r50,r100,r,cropname;
         int sellid=1000;
         
         
@@ -404,14 +432,14 @@ public:
         ifstream info8("cropinfo.txt");
                 while(getline(info8,id,',') && 
                       getline(info8,cropname,',') && 
-                      getline(info8,grade,',') && 
+                      getline(info8,grad,',') && 
                       getline(info8,quant,',') &&
                       getline(info8,r50,',') &&
                       getline(info8,r100,',') &&
                       getline(info8,r)){}
-       stringstream ss(id);
-       ss>>sellid;
-            sellid++;
+
+                      
+       
 
     ofstream cinfo("cropinfo.txt", ios::app);
     cinfo<<sellid<<","<<p<<","<<grade<<","<<quantity<<","<<p50<<","<<p100<<","<<pLast<<endl;
