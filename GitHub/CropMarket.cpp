@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include<fstream>
 #include<sstream>
+#include <cstdio>
 
 using namespace std;
 
@@ -299,6 +300,7 @@ class buyer : public login {
 
                         }
                       }
+                      info9.close(); 
 
 
 
@@ -312,18 +314,114 @@ class buyer : public login {
                     if(temp2==1){
                     cart.push_back(vector<int>{choice, quantity, amount});
 
+                   ifstream in("cropinfo.txt");
+    ofstream out("temp.txt");
+
+    string line;
+
+    while (getline(in, line)) {
+        stringstream ss(line);
+
+        string f1, f2, f3, f4, rest;
+
+        // Read fields
+        getline(ss, f1, ','); // id
+        getline(ss, f2, ','); // cropname
+        getline(ss, f3, ',');
+        getline(ss, f4, ','); // quant
+
+        if (f1 == prid) {
+            int quant = stoi(f4);
+
+            if (quant - quantity == 0) {
+                f2 = "0";   // cropname = 0
+            } else {
+                quant -= quantity;
+                f4 = to_string(quant);
+            }
+        }
+
+        // Write updated data
+        out << f1 << "," << f2 << "," << f3 << "," << f4;
+
+        // Write remaining fields
+        while (getline(ss, rest, ',')) {
+            out << "," << rest;
+        }
+
+        out << endl;
+    }
+
+    in.close();
+    out.close();
+
+    remove("cropinfo.txt");
+    rename("temp.txt", "cropinfo.txt");
+
+
+
                    return;
-                }
+}
+                
                 else if(temp2==2){
-                cart.push_back(vector<int>{choice, quantity, amount});
-                    return;
-                }
+                    cart.push_back(vector<int>{choice, quantity, amount});
+
+                   ifstream in("cropinfo.txt");
+    ofstream out("temp.txt");
+
+    string line;
+
+    while (getline(in, line)) {
+        stringstream ss(line);
+
+        string f1, f2, f3, f4, rest;
+
+        // Read fields
+        getline(ss, f1, ','); // id
+        getline(ss, f2, ','); // cropname
+        getline(ss, f3, ',');
+        getline(ss, f4, ','); // quant
+
+        if (f1 == prid) {
+            int quant = stoi(f4);
+
+            if (quant - quantity == 0) {
+                f2 = "0";   // cropname = 0
+            } else {
+                quant -= quantity;
+                f4 = to_string(quant);
+            }
+        }
+
+        // Write updated data
+        out << f1 << "," << f2 << "," << f3 << "," << f4;
+
+        // Write remaining fields
+        while (getline(ss, rest, ',')) {
+            out << "," << rest;
+        }
+
+        out << endl;
+    }
+
+    in.close();
+    out.close();
+
+    remove("cropinfo.txt");
+    rename("temp.txt", "cropinfo.txt");
+
+
+
+                   return;
+        }
                 else if(temp2==3){
                     return;
                 }
                 
               
-            //else
+                else{
+                    cout<<"Invalid choice"<<endl;
+                }
                 return;
         }
 
@@ -519,18 +617,22 @@ int main() {
             goto frontpage;
         }
 
-        b1.transaction();
-        if(b1.temp1!=1 && b1.temp1!=2){
-            cout<<"Incorrect Input\n";
-            goto restartb;
-        }
+       b1.transaction();
 
-
-        if(b1.temp2==1||b1.temp2==3){
-            goto restartb;
-        }
-
-        b1.payment();
+if(b1.temp2 == 1){
+    goto restartb;   // add more items
+}
+else if(b1.temp2 == 2){
+    b1.payment();    // checkout
+    goto loginpage;
+}
+else if(b1.temp2 == 3){
+    goto restartb;   // discard and restart
+}
+else{
+    cout<<"Invalid input\n";
+    goto restartb;
+}
         goto loginpage;   
     }
 
