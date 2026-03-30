@@ -12,10 +12,11 @@ using namespace std;
 class login {
 protected:
     unordered_map<string, string> users;
-    string username, password;
+    string password;
 
 
 public:
+string username;
     bool run() {
         
 
@@ -106,6 +107,10 @@ public:
         return username;
     }
 
+    void setUsername(string u){
+        username=u;
+    }
+
 };
 
 
@@ -114,6 +119,7 @@ class buyer : public login {
         int amount, choice, quant;
 
     public:
+        
         
         int temp2=3, temp1;
         vector<vector<int>> cart;  //{'prdt id or choice', 'quantity', 'amount'}
@@ -142,11 +148,18 @@ class buyer : public login {
                       getline(info7,r)){
                     if(cropname=="1"){
                         isAvailable=true;
+                        if(r=="0"){
+                            r="-";
+                        }
+                        if(r100=="0"){
+                            r100="-";
+                        }
                         
                         cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Wheat\n"<<"Grade : "<<grade<<"\n"<<
                         "Quantity available : "<<quant<<" kg\n"<<"Rate below 50kg : "<<r50<<"\n"<<
                         "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
                     }
+                    
                 }
                 break;
 
@@ -313,6 +326,8 @@ class buyer : public login {
             
                     if(temp2==1){
                     cart.push_back(vector<int>{choice, quantity, amount});
+                    ofstream info13("history.txt",ios::app);
+        info13<<username<<","<<choice<<","<<quantity<< "," << amount<<"\n";
 
                    ifstream in("cropinfo.txt");
     ofstream out("temp.txt");
@@ -330,8 +345,11 @@ class buyer : public login {
         getline(ss, f3, ',');
         getline(ss, f4, ','); // quant
 
+        
+
         if (f1 == prid) {
             int quant = stoi(f4);
+            
 
             if (quant - quantity == 0) {
                 f2 = "0";   // cropname = 0
@@ -343,6 +361,14 @@ class buyer : public login {
 
         // Write updated data
         out << f1 << "," << f2 << "," << f3 << "," << f4;
+
+        
+        
+
+
+        
+
+
 
         // Write remaining fields
         while (getline(ss, rest, ',')) {
@@ -365,6 +391,8 @@ class buyer : public login {
                 
                 else if(temp2==2){
                     cart.push_back(vector<int>{choice, quantity, amount});
+                    ofstream info13("history.txt",ios::app);
+        info13<<username<<","<<choice<<","<<quantity<< "," << amount<<"\n";
 
                    ifstream in("cropinfo.txt");
     ofstream out("temp.txt");
@@ -382,9 +410,11 @@ class buyer : public login {
         getline(ss, f3, ',');
         getline(ss, f4, ','); // quant
 
+        
+
         if (f1 == prid) {
             int quant = stoi(f4);
-
+        
             if (quant - quantity == 0) {
                 f2 = "0";   // cropname = 0
             } else {
@@ -395,6 +425,8 @@ class buyer : public login {
 
         // Write updated data
         out << f1 << "," << f2 << "," << f3 << "," << f4;
+
+    
 
         // Write remaining fields
         while (getline(ss, rest, ',')) {
@@ -466,7 +498,7 @@ class buyer : public login {
             else{
                 cout<<"     Product ID        Quantity        Amount\n";
                 for (int i=0; i<cart.size(); i++){
-                    cout<<(i+1)<<".       "<<cart[i][0]<<"            "<<cart[i][1]<<"              "<<cart[i][2]<<"\n";
+                    cout<<(i+1)<<".       "<<cart[i][0]<<"              "<<cart[i][1]<<"              "<<cart[i][2]<<"\n";
                     total+=cart[i][2]; 
                     
 
@@ -603,7 +635,7 @@ int main() {
 
     int k;
     frontpage:
-    cout<<"How can we help you today? :)\n( 1. Buy     2. Sell     3. HelpDesk     0. EXIT ) : ";
+    cout<<"How can we help you today? :)\n( 1. Buy     2. Sell     3. HelpDesk    4.History    0. EXIT ) : ";
     cin>>k;
 
     if(k==0)
@@ -611,6 +643,7 @@ int main() {
 
     else if(k==1){              //BUY
         buyer b1;
+        b1.setUsername(username);
         restartb:
         b1.disp_list();
         if(b1.getchoice()==-1){
@@ -700,7 +733,38 @@ else{
         }   
 
         goto frontpage;
-    }   
+} else if(k==4){
+    string un,crname,qn,amt;
+    bool hisav=false;
+    int i=1;
+    cout<<"           Crop            Quantity            Amount\n";
+    ifstream info14("history.txt");
+                while(getline(info14,un,',') && 
+                      getline(info14,crname,',') && 
+                      getline(info14,qn,',') && 
+                      getline(info14,amt)){
+                        if(un==username){
+                            hisav=true;
+                            if(crname=="1")crname="Wheat";
+                            if(crname=="2")crname="Jowar";
+                            if(crname=="3")crname="Bajra";
+                            if(crname=="4")crname="Maize";
+                            if(crname=="5")crname="Barley";
+                            
+                            cout<<i<<"."<<"         "<<crname<<"             "<<qn<<"              "<<amt<<"\n";
+                        
+                        }
+                        if(hisav==true){
+                            i++;
+
+                        }
+                        
+                        
+                      }if(hisav==false){
+                            cout<<"\n**** No Purchases yet.... *****\n";
+                        }
+
+}  
 
 
     return 0;
