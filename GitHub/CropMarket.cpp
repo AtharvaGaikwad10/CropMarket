@@ -2,14 +2,24 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include<fstream>
-#include<sstream>
+#include <fstream>
+#include <sstream>
 #include <cstdio>
 
 using namespace std;
 
 
 class login {
+
+private:
+    string encrypt(string text){                // XOR Obfuscation       
+        char key = 7;
+        for (int i = 0; i < text.length(); i++){
+            text[i] = text[i] ^ key;
+        }
+        return text;
+    }
+
 protected:
     unordered_map<string, string> users;
     string password;
@@ -21,10 +31,20 @@ string username;
         
 
         while (true) {
-            cout << "WELCOME\n1. Log in\n2. Sign up\n0. Exit\n";
-            cout << "Choose option: ";
+            cout << "+===========================================+\n";
+            cout << "|  >>  CROP-MARKET : FARMER'S PORTAL  <<  |\n";
+            cout << "+===========================================+\n";
+            cout << "|                                           |\n";
+            cout << "|       >>  1. Log In                       |\n";
+            cout << "|       >>  2. Sign Up                      |\n";
+            cout << "|       >>  0. Exit                         |\n";
+            cout << "|                                           |\n";
+            cout << "+-------------------------------------------+\n";
+            cout << "|  Enter your choice : ";
             int a, b;
             cin >> a;
+            cout << "+-------------------------------------------+\n";
+
 
             switch (a) {
                 case 1: {
@@ -41,8 +61,8 @@ string username;
                     while(getline(info,storedname,',') && 
                           getline(info,storedpassword)){
 
-                    if (storedname==username && storedpassword==password) {
-                        cout << "Hello " << username << "!! Welcome Back\n";
+                    if (storedname==username && encrypt(storedpassword)==password) {
+                        cout << "\nHello " << username << "!! Welcome Back\n";
                         
                         isCorrect=true;
                         return true;
@@ -85,7 +105,7 @@ string username;
                             users[username] = password;
                             cout << "Your account has been created\n";
                             ofstream info("userinfo.txt",ios::app);
-                            info<<username<<","<<password<<endl;
+                            info<<username<<","<<encrypt(password)<<endl;
 
                         } else {
                             cout << "Passwords don't match. Try again.\n";
@@ -113,398 +133,464 @@ string username;
 
 };
 
-
 class buyer : public login {
     private:
         int amount, choice, quant;
 
     public:
         
-        
         int temp2=3, temp1;
         vector<vector<int>> cart;  //{'prdt id or choice', 'quantity', 'amount'}
-        
 
         void disp_list(){
-            cout<<"Select the desired product :\n1.Wheat\n2.Jowar\n3.Bajra\n4.Maize\n5.Barley\n( -1. EXIT     0. Visit Cart )\n";
-            cout<<"Enter your choice : ";
-            cin>>choice;
+            cout << "\n+===========================================+\n";
+            cout << "|  >>  CROP-MARKET : PRODUCT CATALOGUE <<  |\n";
+            cout << "+===========================================+\n";
+            cout << "|                                           |\n";
+            cout << "|       >>  1. Wheat                        |\n";
+            cout << "|       >>  2. Jowar                        |\n";
+            cout << "|       >>  3. Bajra                        |\n";
+            cout << "|       >>  4. Maize                        |\n";
+            cout << "|       >>  5. Barley                       |\n";
+            cout << "|                                           |\n";
+            cout << "|       >>  0. View Cart                    |\n";
+            cout << "|       >> -1. Back to Menu                 |\n";
+            cout << "|                                           |\n";
+            cout << "+-------------------------------------------+\n";
+            cout << "|  Enter your choice : ";
+            cin >> choice;
+            cout << "+-------------------------------------------+\n";
 
-            string cropname,sellid,grade,quant,r50,r100,r;
+            string cropname,sellid,grade,quant_str,r50,r100,r;
             bool isAvailable=false;
 
             ifstream info7("cropinfo.txt");
             
 
-
-            switch(choice){
-                case 1:
-                while(getline(info7,sellid,',') && 
-                      getline(info7,cropname,',') && 
-                      getline(info7,grade,',') && 
-                      getline(info7,quant,',') &&
-                      getline(info7,r50,',') &&
-                      getline(info7,r100,',') &&
-                      getline(info7,r)){
-                    if(cropname=="1"){
-                        isAvailable=true;
-                        if(r=="0"){
-                            r="-";
-                        }
-                        if(r100=="0"){
-                            r100="-";
-                        }
-                        
-                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Wheat\n"<<"Grade : "<<grade<<"\n"<<
-                        "Quantity available : "<<quant<<" kg\n"<<"Rate below 50kg : "<<r50<<"\n"<<
-                        "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
-                    }
-                    
-                }
-                break;
-
-                case 2:
-                while(getline(info7,sellid,',') && 
-                      getline(info7,cropname,',') && 
-                      getline(info7,grade,',') && 
-                      getline(info7,quant,',') &&
-                      getline(info7,r50,',') &&
-                      getline(info7,r100,',') &&
-                      getline(info7,r)){
-                    if(cropname=="2"){
-                        isAvailable=true;
-                        if(r=="0"){
-                            r="-";
-                        }
-                        if(r100=="0"){
-                            r100="-";
-                        }
-                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Jowar\n"<<"Grade : "<<grade<<"\n"<<
-                        "Quantity available : "<<quant<<" kg\n"<<"Rate below 50kg : "<<r50<<"\n"<<
-                        "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
-                    }
-                }
-                
-                break;
-
-                case 3:
-                while(getline(info7,sellid,',') && 
-                      getline(info7,cropname,',') && 
-                      getline(info7,grade,',') && 
-                      getline(info7,quant,',') &&
-                      getline(info7,r50,',') &&
-                      getline(info7,r100,',') &&
-                      getline(info7,r)){
-                    if(cropname=="3"){
-                        isAvailable=true;
-                        if(r=="0"){
-                            r="-";
-                        }
-                        if(r100=="0"){
-                            r100="-";
-                        }
-                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Bajra\n"<<"Grade : "<<grade<<"\n"<<
-                        "Quantity available : "<<quant<<" kg\n"<<"Rate below 50kg : "<<r50<<"\n"<<
-                        "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
-                    }
-                }
-                break;
-
-                case 4:
-                while(getline(info7,sellid,',') && 
-                      getline(info7,cropname,',') && 
-                      getline(info7,grade,',') && 
-                      getline(info7,quant,',') &&
-                      getline(info7,r50,',') &&
-                      getline(info7,r100,',') &&
-                      getline(info7,r)){
-                    if(cropname=="4"){
-                        isAvailable=true;
-                        if(r=="0"){
-                            r="-";
-                        }
-                        if(r100=="0"){
-                            r100="-";
-                        }
-                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Maize\n"<<"Grade : "<<grade<<"\n"<<
-                        "Quantity available : "<<quant<<" kg\n"<<"Rate below 50kg : "<<r50<<"\n"<<
-                        "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
-                    }
-                }
-                break;
-
-                case 5:
-                while(getline(info7,sellid,',') && 
-                      getline(info7,cropname,',') && 
-                      getline(info7,grade,',') && 
-                      getline(info7,quant,',') &&
-                      getline(info7,r50,',') &&
-                      getline(info7,r100,',') &&
-                      getline(info7,r)){
-                    if(cropname=="5"){
-                        isAvailable=true;
-                        if(r=="0"){
-                            r="-";
-                        }
-                        if(r100=="0"){
-                            r100="-";
-                        }
-                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Barley\n"<<"Grade : "<<grade<<"\n"<<
-                        "Quantity available : "<<quant<<" kg\n"<<"Rate below 50kg : "<<r50<<"\n"<<
-                        "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
-                    }
-                }
-                break;
-
-                case -1:
-                return;
-                break;
-                
-
-                case 0:
+            if(choice==0){
                 disp_cart();
+                if(!cart.empty()){
+                    char a;
+                    cout<<"Do you want to checkout? (Y/N)\n";
+                    cin>>a;
+                    if(a=='Y' || a=='y'){
+                        payment();
+                        return;
+                    }
+                }
+
                 disp_list();
-                break;
             }
+
+            else if(choice==-1)
+                return;
+            
+            else if(choice<6 && choice>0){
+                while(getline(info7,sellid,',') && 
+                      getline(info7,cropname,',') && 
+                      getline(info7,grade,',') && 
+                      getline(info7,quant_str,',') &&
+                      getline(info7,r50,',') &&
+                      getline(info7,r100,',') &&
+                      getline(info7,r)){
+                    if(cropname==to_string(choice)){        
+                        isAvailable=true;
+                        if(r=="0"){
+                            r="-";
+                        }
+                        if(r100=="0"){
+                            r100="-";
+                        }
+                        cout<<"\n"<<"Product ID : "<<sellid<<"\n"<<"Crop: "<<cropname<<"\n"<<"Grade : "<<grade<<"\n"<<
+                        "Quantity available : "<<quant_str<<" kg\n"<<"Rate below 50kg : "<<r50<<"\n"<<
+                        "Rate between 50-100kg : "<<r100<<"\n"<<"Rate above 100kg : "<<r<<endl;
+                    }
+                }
+                info7.close();
+                
+                if(!isAvailable){
+                    cout<<"Product not available!\n";
+                }
+            }  
         }
 
         int getchoice(){        //Getter for choice
             return choice;
         }
 
-
-
         void transaction(){
+            cout << "\n+===========================================+\n";
+            cout << "|  >>  CROP-MARKET : PURCHASE OPTIONS <<  |\n";
+            cout << "+===========================================+\n";
+            cout << "|                                           |\n";
+            cout << "|       >>  1. Buy Bulk                     |\n";
+            cout << "|       >>  2. Buy Sample                   |\n";
+            cout << "|       >>  3. Back                         |\n";
+            cout << "|                                           |\n";
+            cout << "+-------------------------------------------+\n";
+            cout << "|  Enter your choice : ";
+            cin >> temp1;
+            cout << "+-------------------------------------------+\n";
+            
+
+            switch (temp1)
+            {
+            case 1:
+                bulk();
+                break;
+
+            case 2:
+                sample();
+                break;
+
+            case 3:
+                return;
+            
+            default:
+                cout<<"Invalid choice!\n";
+                break;
+            }
+        }    
+        
+        void bulk(){
             string prid;
-            string id,grad,quant,r50,r100,r,cropname;
+            string id,grad,quant_str,r50,r100,r,cropname;
+            
+            // Ask user for Product ID
             cout<<"Enter the Product ID which you wish to buy : ";
             cin>>prid;
             
-            
-                cout<<"How much do you wish to buy? : ";
-                cin>>quant;
-                int quantity=stoi(quant);
-                
-                ifstream info9("cropinfo.txt");
-                while(getline(info9,id,',') && 
-                      getline(info9,cropname,',') && 
-                      getline(info9,grad,',') && 
-                      getline(info9,quant,',') &&
-                      getline(info9,r50,',') &&
-                      getline(info9,r100,',') &&
-                      getline(info9,r)){
-                        if(prid==id){
-                            int num1=stoi(r50);
-                            int num2=stoi(r100);
-                            int num3=stoi(r);
-                            
-                            
-                if(quantity>100){
-                    amount=num3*quantity;   
-                }
-                else if(quantity>50){
-                    amount=num2*quantity;    
-                }
-                else{
-                    amount=num1*quantity;    
-                
-                }
-
-
-                        }
-                      }
-                      info9.close(); 
-
-
-
-                
-
-                cout<<"Total amount = "<<amount;
-
-                cout<<"\n1. Add to cart and buy more \n2. Checkout \n3. Discard this item \n";
-                cin>>temp2;
-            
+            // Verify and get product details
+            ifstream info9("cropinfo.txt");
+            bool found = false;
+            while(getline(info9,id,',') && 
+                  getline(info9,cropname,',') && 
+                  getline(info9,grad,',') && 
+                  getline(info9,quant_str,',') &&
+                  getline(info9,r50,',') &&
+                  getline(info9,r100,',') &&
+                  getline(info9,r)){
+                if(prid==id){
+                    found = true;
+                    cout<<"\nProduct Found!\n";
+                    cout<<"Crop: "<<cropname<<"\n";
+                    cout<<"Grade: "<<grad<<"\n";
+                    cout<<"Quantity available: "<<quant_str<<" kg\n";
+                    cout<<"Rate below 50kg: ₹"<<r50<<"\n";
+                    cout<<"Rate between 50-100kg: ₹"<<r100<<"\n";
+                    cout<<"Rate above 100kg: ₹"<<r<<"\n\n";
+                    
+                    cout<<"How much do you wish to buy? : ";
+                    cin>>quant;
+                    
+                    int quantity = quant;
+                    int num1=stoi(r50);
+                    int num2=stoi(r100);
+                    int num3=stoi(r);
+                    
+                    if(quantity>stoi(quant_str)){
+                        cout<<"Insufficient stock! Only "<<quant_str<<" kg available.\n";
+                        info9.close();
+                        return;
+                    }
+                    
+                    if(quantity>100){
+                        amount=num3*quantity;   
+                    }
+                    else if(quantity>50){
+                        amount=num2*quantity;    
+                    }
+                    else{
+                        amount=num1*quantity;    
+                    }
+                    info9.close();
+                    cout<<"Total amount = ₹"<<amount<<endl;
+                    
+                    cout<<"\n1. Add to cart and buy more \n2. Checkout \n3. Discard this item \n";
+                    cout<<"Enter your choice: ";
+                    cin>>temp2;
+                    
                     if(temp2==1){
-                    cart.push_back(vector<int>{choice, quantity, amount});
-                    ofstream info13("history.txt",ios::app);
-        info13<<username<<","<<choice<<","<<quantity<< "," << amount<<"\n";
-
-                   ifstream in("cropinfo.txt");
-    ofstream out("temp.txt");
-
-    string line;
-
-    while (getline(in, line)) {
-        stringstream ss(line);
-
-        string f1, f2, f3, f4, rest;
-
-        // Read fields
-        getline(ss, f1, ','); // id
-        getline(ss, f2, ','); // cropname
-        getline(ss, f3, ',');
-        getline(ss, f4, ','); // quant
-
-        
-
-        if (f1 == prid) {
-            int quant = stoi(f4);
+                        cart.push_back({stoi(prid), quantity, amount});
+                        ofstream info13("history.txt",ios::app);
+                        info13<<"Buy"<<","<<username<<","<<cropname<<","<<quantity<< "," << amount<<"\n";
+                        info13.close();
+                        
+                        // Update inventory
+                        ifstream in("cropinfo.txt");
+                        ofstream out("temp.txt");
+                        string line;
+                        while (getline(in, line)) {
+                            stringstream ss(line);
+                            string f1, f2, f3, f4, rest;
+                            getline(ss, f1, ',');
+                            getline(ss, f2, ',');
+                            getline(ss, f3, ',');
+                            getline(ss, f4, ',');
+                            
+                            if (f1 == prid) {
+                                int quant_avail = stoi(f4);
+                                if (quant_avail - quantity == 0) {
+                                    f2 = "0";
+                                } 
+                                else {
+                                    quant_avail -= quantity;
+                                    f4 = to_string(quant_avail);
+                                }
+                            }   
+                            out << f1 << "," << f2 << "," << f3 << "," << f4;
+                            while (getline(ss, rest, ',')) {
+                                out << "," << rest;
+                            }
+                            out << endl;
+                        }
+                        in.close();
+                        out.close();
+                        remove("cropinfo.txt");
+                        rename("temp.txt", "cropinfo.txt");
+                        
+                        
+                        cout<<"Item added to cart!\n";
+                        return;
+                    }
+                    else if(temp2==2){
+                        cart.push_back({stoi(prid), quantity, amount});
+                        ofstream info13("history.txt",ios::app);
+                        info13<<username<<","<<cropname<<","<<quantity<< "," << amount<<"\n";
+                        info13.close();
+                        
+                        // Update inventory
+                        ifstream in("cropinfo.txt");
+                        ofstream out("temp.txt");
+                        string line;
+                        while (getline(in, line)) {
+                            stringstream ss(line);
+                            string f1, f2, f3, f4, rest;
+                            getline(ss, f1, ',');
+                            getline(ss, f2, ',');
+                            getline(ss, f3, ',');
+                            getline(ss, f4, ',');
+                            
+                            if (f1 == prid) {
+                                int quant_avail = stoi(f4);
+                                if (quant_avail - quantity == 0) {
+                                    f2 = "0";
+                                } 
+                                else {
+                                    quant_avail -= quantity;
+                                    f4 = to_string(quant_avail);
+                                }
+                            }   
+                            out << f1 << "," << f2 << "," << f3 << "," << f4;
+                            while (getline(ss, rest, ',')) {
+                                out << "," << rest;
+                            }
+                            out << endl;
+                        }
+                        in.close();
+                        out.close();
+                        remove("cropinfo.txt");
+                        rename("temp.txt", "cropinfo.txt");
+                    }
+                    else if(temp2==3){
+                        return;
+                    }
+                    break;
+                }
+            }
+            info9.close();
             
-
-            if (quant - quantity == 0) {
-                f2 = "0";   // cropname = 0
-            } else {
-                quant -= quantity;
-                f4 = to_string(quant);
+            if(!found){
+                cout<<"Invalid Product ID! Please try again.\n";
             }
         }
 
-        // Write updated data
-        out << f1 << "," << f2 << "," << f3 << "," << f4;
-
-        
-        
-
-
-        
-
-
-
-        // Write remaining fields
-        while (getline(ss, rest, ',')) {
-            out << "," << rest;
-        }
-
-        out << endl;
-    }
-
-    in.close();
-    out.close();
-
-    remove("cropinfo.txt");
-    rename("temp.txt", "cropinfo.txt");
-
-
-
-                   return;
-}
-                
-                else if(temp2==2){
-                    cart.push_back(vector<int>{choice, quantity, amount});
-                    ofstream info13("history.txt",ios::app);
-        info13<<username<<","<<choice<<","<<quantity<< "," << amount<<"\n";
-
-                   ifstream in("cropinfo.txt");
-    ofstream out("temp.txt");
-
-    string line;
-
-    while (getline(in, line)) {
-        stringstream ss(line);
-
-        string f1, f2, f3, f4, rest;
-
-        // Read fields
-        getline(ss, f1, ','); // id
-        getline(ss, f2, ','); // cropname
-        getline(ss, f3, ',');
-        getline(ss, f4, ','); // quant
-
-        
-
-        if (f1 == prid) {
-            int quant = stoi(f4);
-        
-            if (quant - quantity == 0) {
-                f2 = "0";   // cropname = 0
-            } else {
-                quant -= quantity;
-                f4 = to_string(quant);
+        void sample(){
+            string prid;
+            string id,grad,quant_str,r50,r100,r,cropname;
+            
+            // Ask user for Product ID
+            cout<<"Enter the Product ID for sample purchase : ";
+            cin>>prid;
+            
+            // Verify and get product details
+            ifstream info8("cropinfo.txt");
+            bool found = false;
+            while(getline(info8,id,',') && 
+                  getline(info8,cropname,',') && 
+                  getline(info8,grad,',') && 
+                  getline(info8,quant_str,',') &&
+                  getline(info8,r50,',') &&
+                  getline(info8,r100,',') &&
+                  getline(info8,r)){
+                if(prid==id){
+                    found = true;
+                    int num3 = stoi(r50);
+                    amount = num3 * 10;                 // 10kg sample
+                    
+                    cout<<"\nProduct Found!\n";
+                    cout<<"Crop: "<<cropname<<"\n";
+                    cout<<"Grade: "<<grad<<"\n";
+                    cout<<"Sample amount is 10kg\n";
+                    cout<<"Total amount = ₹"<<amount<<endl;
+                    
+                    // Check if enough stock for sample
+                    if(10 > stoi(quant_str)){
+                        cout<<"Insufficient stock for sample! Only "<<quant_str<<" kg available.\n";
+                        info8.close();
+                        return;
+                    }
+                    info8.close(); 
+                    cout<<"\n1. Checkout     2. Discard this item \n";
+                    cout<<"Enter your choice: ";
+                    cin>>temp2;
+                    
+                    if(temp2==1){
+                        // Update inventory for sample purchase
+                        ifstream in("cropinfo.txt");
+                        ofstream out("temp.txt");
+                        string line;
+                        while (getline(in, line)) {
+                            stringstream ss(line);
+                            string f1, f2, f3, f4, rest;
+                            getline(ss, f1, ',');
+                            getline(ss, f2, ',');
+                            getline(ss, f3, ',');
+                            getline(ss, f4, ',');
+                            
+                            if (f1 == prid) {
+                                int quant_avail = stoi(f4);
+                                if (quant_avail - 10 == 0) {
+                                    f2 = "0";
+                                } 
+                                else {
+                                    quant_avail -= 10;
+                                    f4 = to_string(quant_avail);
+                                }
+                            }   
+                            out << f1 << "," << f2 << "," << f3 << "," << f4;
+                            while (getline(ss, rest, ',')) {
+                                out << "," << rest;
+                            }
+                            out << endl;
+                        }
+                        in.close();
+                        out.close();
+                        remove("cropinfo.txt");
+                        rename("temp.txt", "cropinfo.txt");
+                        
+                        // Save to history
+                        ofstream info13("history.txt",ios::app);
+                        info13<<username<<","<<cropname<<","<<10<< "," << amount<<"\n";
+                        info13.close();
+                        
+                        payment(prid);
+                    }
+                    else if(temp2==2){
+                        return;
+                    }
+                    break;
+                }
+            }
+            info8.close();
+            
+            if(!found){
+                cout<<"Invalid Product ID! Please try again.\n";
             }
         }
 
-        // Write updated data
-        out << f1 << "," << f2 << "," << f3 << "," << f4;
-
-    
-
-        // Write remaining fields
-        while (getline(ss, rest, ',')) {
-            out << "," << rest;
-        }
-
-        out << endl;
-    }
-
-    in.close();
-    out.close();
-
-    remove("cropinfo.txt");
-    rename("temp.txt", "cropinfo.txt");
-
-
-
-                   return;
-        }
-                else if(temp2==3){
-                    return;
-                }
-                
-              
-                else{
-                    cout<<"Invalid choice"<<endl;
-                }
-                return;
-        }
-
-
-        void payment() {
+        
+        //called for sample
+        void payment(string prid){
+            cout << "\n+===========================================+\n";
+            cout << "|  >>  CROP-MARKET : SAMPLE ORDER     <<  |\n";
+            cout << "+===========================================+\n";
+            cout << "|                                           |\n";
+            cout << "|   Product ID     Quantity      Amount     |\n";
+            cout << "+-------------------------------------------+\n";
+            cout << "|      " << prid << "           10kg          Rs." << amount << "     |\n";
+            cout << "|                                           |\n";
+            cout << "+-------------------------------------------+\n";
+            cout << "|  Confirm Payment? (Y/N) : ";
             char conf;
-            
-            disp_cart();
-                      
-            //cout<<"Select payment method (1. UPI     2. Card )";      SHOULD WE IMPLEMENT THIS and HOW??
+            cin >> conf;
+            cout << "+-------------------------------------------+\n";
 
-
-            confirmation:
-            cout<<"Confirm Payment? (Y/N) : " ;
-            cin>>conf;
-            
-            switch (conf) {
-
+            switch(conf){
                 case 'Y':
                 case 'y':
-                    cout<<"Payment Successful!";
-                    //something
-                     break;
-
+                    cout << "|\n|   >> Payment Successful!\n|\n";
+                    cout << "+-------------------------------------------+\n";
+                    break;
                 case 'N':
                 case 'n':
                     return;
-            
                 default:
-                    cout<<"Invalid input, retry";
-                    goto confirmation;
-            }    
+                    cout << "|\n|   >> Invalid input, retry\n|\n";
+                    cout << "+-------------------------------------------+\n";
+                    payment(prid);  // retry
+            }
+        }
+        
+        // Checkout method for cart and bulk
+        void payment(){
+            if(cart.empty()){
+                cout << "\n+-------------------------------------------+\n";
+                cout << "|  >> Cart is empty! Nothing to checkout.  |\n";
+                cout << "+-------------------------------------------+\n";
+                return;
+            }
+            disp_cart();
+
+            cout << "+-------------------------------------------+\n";
+            cout << "|  Confirm Payment? (Y/N) : ";
+            char conf;
+            cin >> conf;
+            cout << "+-------------------------------------------+\n";
+
+            switch(conf){
+                case 'Y':
+                case 'y':
+                    cout << "|\n|   >> Payment Successful!\n|\n";
+                    cout << "+-------------------------------------------+\n";
+                    cart.clear();
+                    break;
+                case 'N':
+                case 'n':
+                    return;
+                default:
+                    cout << "|\n|   >> Invalid input, retry\n|\n";
+                    cout << "+-------------------------------------------+\n";
+                    payment();  // retry
+            }
         }
 
-
         void disp_cart(){
-            int total=0;
-            cout<<"\n     *****Your Order Summary*******\n\n";
+            int total = 0;
+            cout << "\n\n+===========================================+\n";
+            cout << "|  >>  CROP-MARKET : YOUR CART        <<  |\n";
+            cout << "+===========================================+\n";
+            cout << "|                                           |\n";
 
-            if(cart.size()==0)
-                cout<<"Your Cart is empty\n";
-            else{
-                cout<<"     Product ID        Quantity        Amount\n";
-                for (int i=0; i<cart.size(); i++){
-                    cout<<(i+1)<<".       "<<cart[i][0]<<"              "<<cart[i][1]<<"              "<<cart[i][2]<<"\n";
-                    total+=cart[i][2]; 
-                    
-
+            if(cart.size() == 0){
+                cout << "|        ** Your Cart is Empty **          |\n";
+                cout << "|                                           |\n";
+                cout << "+-------------------------------------------+\n";
             }
-            cout<<"\nTotal Amount = "<<total<<"\n\n";
-            
+            else{
+                cout << "|   #   Product ID   Quantity   Amount      |\n";
+                cout << "+-------------------------------------------+\n";
+                for(int i = 0; i < cart.size(); i++){
+                    cout << "|   " << (i+1) << ".     "
+                        << cart[i][0] << "          "
+                        << cart[i][1] << "kg       "
+                        << "Rs." << cart[i][2] << "\n";
+                    total += cart[i][2];
+                }
+                cout << "|                                           |\n";
+                cout << "+-------------------------------------------+\n";
+                cout << "|  >>  Total Amount : Rs." << total << "\n";
+                cout << "+-------------------------------------------+\n";
             }
         }
 };
@@ -512,7 +598,7 @@ class buyer : public login {
 
 class sell : public login {
 private:
-    int p, quantity, p50 = 0, p100 = 0, pLast = 0,sellid=1000;
+    int p, quantity, r50 = 0, r100 = 0, r = 0,sellid=1000;
     char grade;
     string line;
 
@@ -520,63 +606,87 @@ private:
 public:
     void product_info() {
 
-    string id = "999";   
-    string line;
+        string id = "999";
+        string line;
 
-    ifstream info10("cropinfo.txt");
-
-    
-    while (getline(info10, line)) {
-        if (!line.empty()) {
-            size_t pos = line.find(',');
-            if (pos != string::npos)
-                id = line.substr(0, pos); 
+        ifstream info10("cropinfo.txt");
+        while (getline(info10, line)) {
+            if (!line.empty()) {
+                size_t pos = line.find(',');
+                if (pos != string::npos)
+                    id = line.substr(0, pos);
+            }
         }
+        info10.close();
+
+        int newId = stoi(id) + 1;
+        id = to_string(newId);
+
+        cout << "\n+===========================================+\n";
+        cout << "|  >>  CROP-MARKET : ADD PRODUCT      <<  |\n";
+        cout << "+===========================================+\n";
+        cout << "|                                           |\n";
+        cout << "|   >>  1. Wheat                            |\n";
+        cout << "|   >>  2. Jowar                            |\n";
+        cout << "|   >>  3. Bajra                            |\n";
+        cout << "|   >>  4. Maize                            |\n";
+        cout << "|   >>  5. Barley                           |\n";
+        cout << "|                                           |\n";
+        cout << "+-------------------------------------------+\n";
+        cout << "|  Enter product number : ";
+        bool wrong = false;
+        do {
+            if(wrong){
+                cout << "|  Invalid input, try again : ";
+            }
+            cin >> p;
+            wrong = true;
+        } while(p < 1 || p > 5);
+        cout << "+-------------------------------------------+\n";
+        cout << "|  Enter grade (A = High, B = Average,      |\n";
+        cout << "|               C = Low)       : ";
+        cin >> grade;
+        cout << "+-------------------------------------------+\n";
+        cout << "|  Enter quantity (kg)          : ";
+        cin >> quantity;
+        cout << "+-------------------------------------------+\n";
+        cout << "|  Enter price up to 50kg  (Rs.): ";
+        cin >> r50;
+
+        if(quantity > 50){
+            cout << "+-------------------------------------------+\n";
+            cout << "|  Enter price 50-100kg    (Rs.): ";
+            cin >> r100;
+        } else r100 = 0;
+
+        if(quantity > 100){
+            cout << "+-------------------------------------------+\n";
+            cout << "|  Enter price above 100kg (Rs.): ";
+            cin >> r;
+        } else r = 0;
+
+        cout << "+-------------------------------------------+\n";
+
+        ofstream cinfo("cropinfo.txt", ios::app);
+        cinfo << id << ","
+            << p << ","
+            << grade << ","
+            << quantity << ","
+            << r50 << ","
+            << r100 << ","
+            << r << endl;
+        cinfo.close();
+
+        ofstream info15("history.txt",ios::app);
+        info15<<"Sell"<<","<<username<<","<<cropname<<","<<quantity<< "," << amount<<"\n";
+        info15.close();
+
+        cout << "|                                           |\n";
+        cout << "|  >>  Product added! ID : " << id << "             |\n";
+        cout << "|                                           |\n";
+        cout << "+-------------------------------------------+\n";
     }
-    info10.close();
 
-   
-    int newId = stoi(id) + 1;
-    id = to_string(newId);
-
-   
-    cout << "Enter product number: ";
-    cin >> p;
-
-    cout << "Enter product grade:\nA: High\nB: Average\nC: Low\n";
-    cin >> grade;
-
-    cout << "Enter quantity (kg): ";
-    cin >> quantity;
-
-    cout << "Enter price up to 50kg : ₹";
-    cin >> p50;
-
-    if (quantity > 50) {
-        cout << "Enter price 50-100kg : ₹";
-        cin >> p100;
-    } else p100 = 0;
-
-    if (quantity > 100) {
-        cout << "Enter price above 100kg : ₹";
-        cin >> pLast;
-    } else pLast = 0;
-
-
-    ofstream cinfo("cropinfo.txt", ios::app);
-
-    cinfo << id << ","
-          << p << ","
-          << grade << ","
-          << quantity << ","
-          << p50 << ","
-          << p100 << ","
-          << pLast << endl;
-
-    cinfo.close();
-
-    cout << "\n Product added successfully with ID: " << id << endl;
-}
 };
 
 class Crop {
@@ -632,11 +742,22 @@ int main() {
 
     username=l1.getusername();      
 
-
-    int k;
     frontpage:
-    cout<<"How can we help you today? :)\n( 1. Buy     2. Sell     3. HelpDesk    4.History    0. EXIT ) : ";
-    cin>>k;
+    int k;
+    cout << "\n+===========================================+\n";
+    cout << "|  >>  CROP-MARKET : MAIN MENU        <<  |\n";
+    cout << "+===========================================+\n";
+    cout << "|                                           |\n";
+    cout << "|       >>  1. Buy                          |\n";
+    cout << "|       >>  2. Sell                         |\n";
+    cout << "|       >>  3. HelpDesk                     |\n";
+    cout << "|       >>  4. History                      |\n";
+    cout << "|       >>  0. Log Out                      |\n";
+    cout << "|                                           |\n";
+    cout << "+-------------------------------------------+\n";
+    cout << "|  Enter your choice : ";
+    cin >> k;
+    cout << "+-------------------------------------------+\n";
 
     if(k==0)
         goto loginpage;
@@ -646,29 +767,38 @@ int main() {
         b1.setUsername(username);
         restartb:
         b1.disp_list();
+        
         if(b1.getchoice()==-1){
             goto frontpage;
         }
+        else if(b1.getchoice()==0){
+            // Cart was displayed, continue shopping
+            goto restartb;
+        }
+        else {
+            b1.transaction();
 
-       b1.transaction();
-
-if(b1.temp2 == 1){
-    goto restartb;   // add more items
-}
-else if(b1.temp2 == 2){
-    b1.payment();    // checkout
-    goto loginpage;
-}
-else if(b1.temp2 == 3){
-    goto restartb;   // discard and restart
-}
-else{
-    cout<<"Invalid input\n";
-    goto restartb;
-}
-        goto loginpage;   
+            if(b1.temp1==3)
+                goto restartb;
+            
+            
+            // After transaction, check what to do
+            if(b1.temp2 == 1){
+                goto restartb;   // Add more items
+            }
+            else if(b1.temp2 == 2){
+                b1.payment();    // Checkout and pay
+                goto frontpage;   // Return to main menu
+            }
+            else if(b1.temp2 == 3){
+                goto restartb;   // Discard and restart
+            }
+            else{
+                cout<<"Invalid input\n";
+                goto restartb;
+            }
+        }
     }
-
 
     else if(k==2){              //SELL
          sell s1;
@@ -676,7 +806,6 @@ else{
         restarts:
             s1.product_info();
             
-
             cout << "1. Confirm\n2. Add more products\n0. Exit\n";
             cin >> ch;
 
@@ -685,7 +814,6 @@ else{
             cout << "Press 0 to continue.\n";
             goto frontpage;
         }
-
         else{
              // add data to file system
             if (ch == 1) {
@@ -694,78 +822,122 @@ else{
             }
             else if(ch == 2)
                 goto restarts;
-
-
         }
-        
     }
 
+    else if(k==3){
 
-    else if(k==3){              //HELPDESK
+    vector<Crop> crops;
+    crops.push_back(Crop("Rice",      "h", "h", "h", "m"));
+    crops.push_back(Crop("Wheat",     "h", "m", "m", "w"));
+    crops.push_back(Crop("Maize",     "m", "m", "m", "s"));
+    crops.push_back(Crop("Millets",   "l", "l", "h", "s"));
+    crops.push_back(Crop("Sugarcane", "h", "h", "h", "m"));
 
-        vector<Crop> crops;
-        crops.push_back(Crop("Rice", "high", "high", "high", "monsoon"));               
-        crops.push_back(Crop("Wheat", "high", "moderate", "moderate", "winter"));
-        crops.push_back(Crop("Maize", "moderate", "moderate", "moderate", "summer"));
-        crops.push_back(Crop("Millets", "low", "low", "high", "summer"));
-        crops.push_back(Crop("Sugarcane", "high", "high", "high", "monsoon"));
+    string soil, water, temp, season;
 
-    
-        cout<<"Share your farm details and we'll help you get MAXIMUM YEILD!!\n";
+    cout << "\n+===========================================+\n";
+    cout << "|  >>  CROP-MARKET : HELPDESK         <<  |\n";
+    cout << "+===========================================+\n";
+    cout << "|                                           |\n";
+    cout << "|   Share your farm details and we'll       |\n";
+    cout << "|   help you get MAXIMUM YIELD!!            |\n";
+    cout << "|                                           |\n";
+    cout << "+-------------------------------------------+\n";
+    cout << "| Soil Fertility (h=High  m=Moderate  l=Low) : ";
+    cin  >> soil;
+    cout << "+-------------------------------------------+\n";
+    cout << "| Water Supply   (h=High  m=Moderate  l=Low) : ";
+    cin  >> water;
+    cout << "+-------------------------------------------+\n";
+    cout << "| Temperature    (h=High  m=Moderate  l=Low) : ";
+    cin  >> temp;
+    cout << "+-------------------------------------------+\n";
+    cout << "| Season     (m=Monsoon  w=Winter  s=Summer) : ";
+    cin  >> season;
+    cout << "+-------------------------------------------+\n";
 
-        string soil, water, temp, season;
+    cout << "\n+===========================================+\n";
+    cout << "|  >>  RECOMMENDED CROPS              <<  |\n";
+    cout << "+===========================================+\n";
+    cout << "|                                           |\n";
 
-        cout << "Enter soil fertility: ";  
-        cin >> soil;
-        cout << "Enter water supply: ";    
-        cin >> water;
-        cout << "Enter temperature: ";     
-        cin >> temp;
-        cout << "Enter season: ";          
-        cin >> season;
+    bool found = false;
+    for(const Crop& c : crops){
+        int score = calculateScore(c, soil, water, temp, season);
+        if(score >= 6){
+            found = true;
+            cout << "|   >>  " << c.getName()
+                 << "  (Score : " << score << "/10)\n";
+            cout << "|                                           |\n";
+        }
+    }
 
-        cout << "\nRecommended Crops:\n";
+    if(!found){
+        cout << "|   >>  No strong matches found.            |\n";
+        cout << "|        Try adjusting your inputs.         |\n";
+        cout << "|                                           |\n";
+    }
 
-        for (const Crop& c : crops) {
-            int score = calculateScore(c, soil, water, temp, season);
-           if (score >= 6)
-               cout << c.getName() << " (Score: " << score << ")\n\n\n";
-        }   
+    cout << "+-------------------------------------------+\n";
+    cout << "|  Press Enter to continue...               |\n";
+    cout << "+-------------------------------------------+\n";
+    cin.ignore();
+    cin.get();
+    goto frontpage;
+} 
 
+
+    else if(k==4){
+        string un, crname, qn, amt,type;
+        bool hisav = false;
+        int i = 1;
+
+        cout << "\n+===========================================+\n";
+        cout << "|  >>  CROP-MARKET : PURCHASE HISTORY <<  |\n";
+        cout << "+===========================================+\n";
+        cout << "|                                           |\n";
+        cout << "|   User : " << username << "\n";
+        cout << "|                                           |\n";
+        cout << "|   #       Type        Crop        Quantity    Amount    |\n";
+        cout << "+-------------------------------------------+\n";
+
+        ifstream info14("history.txt");
+        while(getline(info14, type, ',') &&
+            getline(info14, un, ',') &&
+            getline(info14, crname, ',') &&
+            getline(info14, qn, ',') &&
+            getline(info14, amt)){
+            if(un == username){
+                hisav = true;
+                if(crname=="1") crname="Wheat";
+                if(crname=="2") crname="Jowar";
+                if(crname=="3") crname="Bajra";
+                if(crname=="4") crname="Maize";
+                if(crname=="5") crname="Barley";
+
+                cout << "|   " << i << ".   "
+                    <<type<<"         "<< crname << "        "
+                    << qn << "kg        "
+                    << "Rs." << amt << "\n";
+                i++;
+            }
+        }
+        info14.close();
+
+        if(hisav == false){
+            cout << "|                                           |\n";
+            cout << "|     ** No Purchases Yet **                |\n";
+        }
+
+        cout << "|                                           |\n";
+        cout << "+-------------------------------------------+\n";
+        cout << "|  Press Enter to continue...               |\n";
+        cout << "+-------------------------------------------+\n";
+        cin.ignore();
+        cin.get();
         goto frontpage;
-} else if(k==4){
-    string un,crname,qn,amt;
-    bool hisav=false;
-    int i=1;
-    cout<<"           Crop            Quantity            Amount\n";
-    ifstream info14("history.txt");
-                while(getline(info14,un,',') && 
-                      getline(info14,crname,',') && 
-                      getline(info14,qn,',') && 
-                      getline(info14,amt)){
-                        if(un==username){
-                            hisav=true;
-                            if(crname=="1")crname="Wheat";
-                            if(crname=="2")crname="Jowar";
-                            if(crname=="3")crname="Bajra";
-                            if(crname=="4")crname="Maize";
-                            if(crname=="5")crname="Barley";
-                            
-                            cout<<i<<"."<<"         "<<crname<<"             "<<qn<<"              "<<amt<<"\n";
-                        
-                        }
-                        if(hisav==true){
-                            i++;
-
-                        }
-                        
-                        
-                      }if(hisav==false){
-                            cout<<"\n**** No Purchases yet.... *****\n";
-                        }
-
-}  
-
+    }
 
     return 0;
 }
